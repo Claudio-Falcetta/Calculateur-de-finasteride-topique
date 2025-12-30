@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de Dosage Finastéride Topique</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #ddd6fe 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        h1 {
+            color: #1e40af;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+        
+        .section {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            color: #3b82f6;
+        }
+        
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        
+        input {
+            padding: 10px 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .hint {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+        
+        .warning {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: start;
+        }
+        
+        .warning.error {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+        
+        .warning-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            color: #f59e0b;
+        }
+        
+        .warning.error .warning-icon {
+            color: #dc2626;
+        }
+        
+        .warning-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #92400e;
+        }
+        
+        .warning.error .warning-text {
+            color: #991b1b;
+        }
+        
+        .results {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border: 2px solid #10b981;
+            border-radius: 12px;
+            padding: 24px;
+        }
+        
+        .results-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .result-label {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+        
+        .result-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .result-value.blue { color: #3b82f6; }
+        .result-value.indigo { color: #6366f1; }
+        .result-value.purple { color: #8b5cf6; }
+        
+        .result-hint {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+        
+        .info-box {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .info-title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+        
+        .info-label {
+            color: #6b7280;
+        }
+        
+        .info-value {
+            font-weight: 600;
+            color: #111827;
+        }
+        
+        .instructions {
+            background: #dbeafe;
+            border: 1px solid #3b82f6;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+        
+        .instructions-text {
+            font-size: 14px;
+            color: #1e40af;
+            line-height: 1.6;
+        }
+        
+        .disclaimer {
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 24px;
+        }
+        
+        .disclaimer-title {
+            font-weight: 600;
+            font-size: 12px;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        
+        .disclaimer-text {
+            font-size: 12px;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculateur de Dosage Finastéride Topique</h1>
+        <p class="subtitle">Déterminez précisément les quantités à mélanger pour votre traitement personnalisé</p>
+        
+        <div class="section">
+            <h2 class="section-title">
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                Paramètres de traitement
+            </h2>
+            
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="volumePerApplication">Volume souhaité par application (ml)</label>
+                    <input type="number" id="volumePerApplication" value="1" step="0.1" min="0.5" max="5">
+                    <span class="hint">Généralement entre 0,5 et 2 ml</span>
+                </div>
+                
+                <div class="input-group">
+                    <label for="dailyDose">Dose totale journalière de finastéride (mg)</label>
+                    <input type="number" id="dailyDose" value="1" step="0.1" min="0" max="10">
+                    <span class="hint">Recommandé : 0,5 à 2,5 mg/jour</span>
+                </div>
+                
+                <div class="input-group">
+                    <label for="applicationsPerDay">Nombre d'applications par jour</label>
+                    <input type="number" id="applicationsPerDay" value="2" step="1" min="1" max="3">
+                    <span class="hint">Typiquement 1 ou 2 fois/jour</span>
+                </div>
+                
+                <div class="input-group">
+                    <label for="concentration">Concentration de finastéride dans le flacon (%)</label>
+                    <input type="number" id="concentration" value="0.2" step="0.01" min="0.01" max="5">
+                    <span class="hint">0,2% = 2 mg/ml | 0,25% = 2,5 mg/ml | 0,1% = 1 mg/ml</span>
+                </div>
+            </div>
+        </div>
+        
+        <div id="warningBox" class="warning hidden">
+            <svg class="warning-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <p class="warning-text" id="warningText"></p>
+        </div>
+        
+        <div id="resultsBox" class="results">
+            <h2 class="results-title">
+                <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                Résultats - Quantités à mélanger
+            </h2>
+            
+            <div class="results-grid">
+                <div class="result-card">
+                    <p class="result-label">Solution de finastéride</p>
+                    <p class="result-value blue" id="finasterideVolume">0.000 ml</p>
+                    <p class="result-hint">À prélever du flacon concentré</p>
+                </div>
+                
+                <div class="result-card">
+                    <p class="result-label">Minoxidil / Solvant</p>
+                    <p class="result-value indigo" id="minoxidilVolume">0.000 ml</p>
+                    <p class="result-hint">À ajouter pour dilution</p>
+                </div>
+                
+                <div class="result-card">
+                    <p class="result-label">Volume total</p>
+                    <p class="result-value purple" id="totalVolume">0.00 ml</p>
+                    <p class="result-hint">Par application</p>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h3 class="info-title">Informations supplémentaires</h3>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <span class="info-label">Dose par application :</span>
+                        <span class="info-value" id="dosePerApp">0.00 mg</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Dose journalière totale :</span>
+                        <span class="info-value" id="dailyTotal">0.00 mg</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Concentration flacon :</span>
+                        <span class="info-value" id="concMgMl">0.0 mg/ml</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Applications par jour :</span>
+                        <span class="info-value" id="appsPerDay">0x</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <p class="instructions-text">
+                    <strong>Mode d'emploi :</strong> Mélangez <span id="instructFinVol">0.000</span> ml de solution de finastéride 
+                    avec <span id="instructMinVol">0.000</span> ml de minoxidil (ou solvant) dans un petit verre. 
+                    Mélangez bien et appliquez immédiatement sur le cuir chevelu.
+                </p>
+            </div>
+        </div>
+        
+        <div class="disclaimer">
+            <p class="disclaimer-title">⚠️ Avertissement médical :</p>
+            <p class="disclaimer-text">
+                Ce calculateur est un outil d'aide à la préparation. Consultez toujours un professionnel de santé 
+                avant de commencer un traitement. Les dosages recommandés doivent être validés par votre médecin 
+                en fonction de votre situation individuelle.
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        function calculateDosage() {
+            // Récupérer les valeurs
+            const volumePerApplication = parseFloat(document.getElementById('volumePerApplication').value) || 0;
+            const dailyDose = parseFloat(document.getElementById('dailyDose').value) || 0;
+            const applicationsPerDay = parseInt(document.getElementById('applicationsPerDay').value) || 1;
+            const concentration = parseFloat(document.getElementById('concentration').value) || 0;
+            
+            // Calculs
+            const dosePerApplication = dailyDose / applicationsPerDay;
+            const concentrationMgPerMl = concentration * 10;
+            const finasterideVolumeNeeded = dosePerApplication / concentrationMgPerMl;
+            const minoxidilVolume = volumePerApplication - finasterideVolumeNeeded;
+            const totalVolume = volumePerApplication;
+            
+            // Gestion des warnings
+            const warningBox = document.getElementById('warningBox');
+            const warningText = document.getElementById('warningText');
+            
+            if (dailyDose > 5) {
+                warningBox.className = 'warning error';
+                warningText.textContent = '⚠️ DOSE EXCESSIVE : La dose journalière dépasse 5 mg. Cela peut augmenter significativement les effets secondaires systémiques. Veuillez réduire la dose.';
+                warningBox.classList.remove('hidden');
+            } else if (dailyDose < 0.25) {
+                warningBox.className = 'warning';
+                warningText.textContent = '⚠️ DOSE INSUFFISANTE : La dose journalière est inférieure à 0,25 mg. Cette dose pourrait être trop faible pour obtenir des résultats thérapeutiques optimaux.';
+                warningBox.classList.remove('hidden');
+            } else if (minoxidilVolume < 0) {
+                warningBox.className = 'warning error';
+                warningText.textContent = '⚠️ ERREUR : Le volume de finastéride nécessaire dépasse le volume total souhaité par application. Augmentez le volume par application ou réduisez la dose.';
+                warningBox.classList.remove('hidden');
+            } else {
+                warningBox.classList.add('hidden');
+            }
+            
+            // Affichage des résultats
+            if (minoxidilVolume >= 0) {
+                document.getElementById('finasterideVolume').textContent = finasterideVolumeNeeded.toFixed(3) + ' ml';
+                document.getElementById('minoxidilVolume').textContent = minoxidilVolume.toFixed(3) + ' ml';
+                document.getElementById('totalVolume').textContent = totalVolume.toFixed(2) + ' ml';
+                document.getElementById('dosePerApp').textContent = dosePerApplication.toFixed(2) + ' mg';
+                document.getElementById('dailyTotal').textContent = dailyDose.toFixed(2) + ' mg';
+                document.getElementById('concMgMl').textContent = concentrationMgPerMl.toFixed(1) + ' mg/ml';
+                document.getElementById('appsPerDay').textContent = applicationsPerDay + 'x';
+                document.getElementById('instructFinVol').textContent = finasterideVolumeNeeded.toFixed(3);
+                document.getElementById('instructMinVol').textContent = minoxidilVolume.toFixed(3);
+            }
+        }
+        
+        // Calculer au chargement
+        calculateDosage();
+        
+        // Recalculer à chaque changement
+        document.getElementById('volumePerApplication').addEventListener('input', calculateDosage);
+        document.getElementById('dailyDose').addEventListener('input', calculateDosage);
+        document.getElementById('applicationsPerDay').addEventListener('input', calculateDosage);
+        document.getElementById('concentration').addEventListener('input', calculateDosage);
+    </script>
+</body>
+</html>
